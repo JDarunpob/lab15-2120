@@ -20,3 +20,5 @@ export const zCoursePutBody = z.object({
 export const zCourseDeleteBody = z.object({
   courseId: zCourseId
 });
+
+export { zCourseId };
