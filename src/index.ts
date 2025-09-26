@@ -1,38 +1,32 @@
-import express from "express";
-import morgan from 'morgan';
-import type { Request, Response } from "express";
-import router from "./routes/courseRoutes.js";
+import express, { type Request, type Response } from "express";
+import morgan from "morgan";
+
+import studentRouter from "./routes/studentRoutes.js";
+import courseRouter from "./routes/courseRoutes.js";
+
+import { students } from "./db/db.js";
 
 const app: any = express();
+
+
 app.use(express.json());
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 
-app.get("/",(req:Request,res:Response)=>{
+app.get("/", (req: Request, res: Response) => {
+  res.send("API services for Student Data");
+});
+
+app.get("/me", (req: Request, res: Response) => {
   return res.status(200).json({
-    sucess:true,
-    message:"lab 15 API service successfully"
-  })
+    success: true,
+    message: "Student Information",
+    data: students[0]
+  });
 });
 
-app.get("/me",(req: Request, res: Response) => {
-    return res.status(200).json({
-	success : true,
-	message : "Student Information",
-	data : {
-		studentId : "670612120",
-		firstName : "Darunpob",
-		lastName : "Saengson",
-		program : "CPE",
-		section : "801"
-        }
-    });
-});
-
-app.use("/api/v2",router);
+app.use("/api/v2/students",studentRouter);
+app.use("/api/v2/courses",courseRouter);
 
 app.listen(3000, () =>
   console.log("🚀 Server running on http://localhost:3000")
 );
-
-
-export default app;
